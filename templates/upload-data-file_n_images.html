@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    
+    <title>Jewellery Recognition</title>
+    <style>
+        .row {
+            margin-left: 0;
+            margin-right: 0;
+        }
+
+        .margin-top-10 {
+            margin-top: 10px;
+        }
+
+        .left-section {
+            margin-top: 5%;
+            margin-left: 4%;
+        }
+
+        .margin-top-30 {
+            margin-top: 30px;
+        }
+
+        .margin-top-5 {
+            margin-top: 5px;
+        }
+
+        .margin-left-10 {
+            margin-left: 10px;
+        }
+        .user-detail-card{
+            margin: 10px;
+            width: 200px;
+            height: 220px;
+            border-radius: 10px;
+            -webkit-box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.1);
+            box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.1);
+        }
+        .heading-title{
+            text-align:center;
+            height: 35px;
+            width: 200px;
+            background-color: #0b5ed7;
+            border-radius: 10px 10px 0px 0px;
+            padding-top: 0px;
+        }
+        .heading-txt{
+            padding-top: 5px;
+            font-size: 16px;
+            color: #fff;
+            width: 200px;
+            font-weight: bold;
+        }
+        .user-img{
+            text-align: center;
+            display: block;
+            margin-left: 0;
+            width:200px;
+            height:200px;
+            
+        }
+        .name{
+            font-size: 25px;
+            line-height: 50px;
+            font-weight: 600;
+            color: #0083B7;
+            text-align: center;
+        }
+        .head{
+            color: #A1A1A1;
+            width: 160px;
+            text-align: right;
+            margin-right: 5px;
+        }
+        .normal-txt{
+            font-size: 20px;
+            display: flex;
+        }
+        .reset-btn{
+            top: 0px;
+            margin: 15px;
+            position: relative;
+        }
+        .btn-reset{
+            position: relative;
+/*             left: 350px; */
+            bottom: 5px;
+            font-size: 16px;
+        }
+        .margin-right-10{
+            margin-right: 10px;
+        }
+        .bg-image{
+            position: absolute;
+            right: 0;
+            z-index: -1;
+        }
+        .card-image{
+/*             width: 383px;
+            height: 410px; */
+            width: 200px;
+            height: 295px;
+            -webkit-box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.1);
+            box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.1);
+            border-radius: 20px;
+            padding-left: 0;
+        }
+        .match-txt{
+/*             display: flex; */
+            font-size: 32px;
+            justify-content: space-between;
+            align-items: center;
+            height: 85px;
+            padding: 0px 10px;
+            color: #BFBFBF;
+        }
+        .justify-content-space-around{
+            justify-content: space-around;
+        }
+        .customize-img{
+/*             width: 383px;
+            height: 311px; */
+            width: 200px;
+            height: 200px;
+            border-radius: 10px 10px 0px 0px;
+            box-shadow: 0px 0px 10px #a6a6a6;
+        }
+        .customize-display{
+            width: 200px;
+            height: 200px;
+            margin: 0px;
+            border-radius: 0px 0px 10px 10px;
+        }
+        .test{
+            display: flex;
+            padding-left: 25px;
+            padding-top: 10px;
+        }
+        .custom-title{
+            background-color: #0b5ed7;
+            border-radius: 10px 10px 0px 0px;
+            text-align: left;
+            color: white;
+            height: 35px;
+        }
+        .custom-all-image{
+            margin-left: auto;
+            margin-right: auto;
+            width: 95%;
+            box-shadow: 0px 0px 10px #a6a6a6;
+            border-radius: 10px 10px 10px 10px;
+        }
+        .custom-card-image{
+            width: 200px;
+            height: 280px;
+            margin: 20px 30px 20px 20px;
+            box-shadow: 0px 0px 10px #a6a6a6;
+            border-radius: 10px 10px 10px 10px;
+        }
+        .custon-card-all-images{
+            padding-left: 30px;
+            display: flex;
+        }
+        .image-discription{
+            font-size: 16px; 
+            padding: 5px 10px;
+        }
+        .custom-title-text{
+            padding-left: 25px;
+            padding-top: 5px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .crop-btn{
+            top: 0px;
+            margin: 15px;
+            position: relative;
+            display: none;
+        }
+        .checkbox{
+            margin-left: 10px;
+            margin-right: 5px;
+            width: 20px;
+            height: 20px;
+        }
+        .checkbox:checked + .crop-btn {
+            display: block;
+        }
+        .lable-class{
+/*             padding-top: 210px; */
+        }
+        .manually-button-checkbox{
+            padding-top: 50px;
+        }
+
+    </style>
+</head>
+
+<body>
+    
+<div>
+<form action="{{url_for('crop_image')}}" method="POST">
+    <div class="row">
+            <div class="test">
+                <input type="hidden" id="cropped_img" name="cropped_img" value="static/{{upload_image}}">
+                <input type="hidden" id="j_type" name="j_type" value="{{ j_type }}">
+                <div class="user-detail-card">
+                    <div class="heading-title">
+                        <div class="heading-txt">Uploaded Image</div>
+                    </div>
+                    <div class="user-img">
+                        <img class="customize-display" src="static/{{upload_image}}" alt="">
+                    </div>
+                </div>
+                
+
+                <div class="user-detail-card">
+                    <div class="heading-title">
+                        <div class="heading-txt">Detected Jewellery</div>
+                    </div>
+                    <div class="user-img">
+                        <img class="customize-display" src="static/{{cropped_image}}" alt="">
+                    </div>
+                </div>
+
+                
+
+                <div class="manually-button-checkbox">
+
+                    <div class="reset-btn">
+                        <a href="/">
+                        <button type="button" class="btn btn-primary btn-reset">
+                            <img class="margin-right-10" src="static/undo-arrow 1.svg" style="height: 18px; width: 18px">
+                            select another image
+                        </button>
+                        </a>
+                    </div>
+
+                    <br>
+
+                    <div stlye="">
+                        <label for="myCheck" class="lable-class"></label> 
+                        <input type="checkbox" class="checkbox" id="myCheck">
+                        
+                        Jewellery not detected?
+
+                        <div class="crop-btn">
+                            <button type="submit" class="btn btn-primary btn-reset">
+                                <img class="margin-right-10" src="static/undo-arrow 1.svg" 
+                                    style="height: 18px; width: 18px">
+                                Crop manually
+                            </button>
+                        </div>
+                    </div>
+
+                
+<!--                 <div class="reset-btn">
+                        <button type="submit" class="btn btn-primary btn-reset"><img class="margin-right-10" src="static/undo-arrow 1.svg">Crop manually</button>
+                </div> -->
+                </div>
+                
+            </div>
+    </div>
+    
+    <br>
+    
+    
+    <div class="custom-all-image">
+        <div class="custom-title">
+            <p class="custom-title-text">Top 5 Matched Designs For {{ j_type }}</p>
+        </div>
+        
+        <div class="custon-card-all-images">
+            {% for i in range(top) %}
+               <div class="custom-card-image">
+                    <div>
+                        <img class="customize-img" src="static/{{ all_images[i] }}" alt="image-1">
+                    </div>
+                    <div class="image-discription">
+                        <div>{{ all_label_ids[i] }}<br></div>
+                        <div style="color: #a6a6a6">Score: {{ all_scores[i] }}%</div>
+                    </div>
+               </div>
+            {% endfor %}
+        </div>
+    </div>
+
+</form>
+</div>
+</body>
+
+</html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+    <title>Jewellery Recognition</title>
+    <style>
+        .row {
+            margin-left: 0;
+            margin-right: 0;
+        }
+
+        .file-btn {
+            position: relative;
+            overflow: hidden;
+            background: transparent;
+            color: #656565;
+            border: none;
+            -webkit-box-shadow: 0px 0px 1px 1px #00000026;
+            box-shadow: 0px 0px 1px 1px #00000026;
+            height: 40px;
+        }
+        .file-btn:hover{
+            background: transparent;
+            color: #656565;
+            border: none;
+            -webkit-box-shadow: 0px 0px 1px 1px #00000026;
+            box-shadow: 0px 0px 1px 1px #00000026;
+        }
+        .file-btn-upload {
+            position: absolute;
+            opacity: 0;
+            right: 0;
+            top: 0;
+        }
+        .margin-top-10{
+            margin-top: 10px;
+        }
+        .left-section{
+            margin-top: 3%;
+            margin-left: 1%;
+        }
+        .card{
+            height: 200px;
+            width: 100%;
+            border: 1px solid #aaaaaa;
+        }
+        .margin-top-30{
+            margin-top: 30px;
+        }
+        .input{
+            height: 40px;
+            width: 100%;
+            font-size: 18px;
+            border-radius: 5px;
+            border: 1px solid #a6a4a4;
+            padding-left: 5px;
+        }
+        .data-card{
+            padding: 10px;
+            height: 250px;
+            width: 100%;
+            border: 1px solid #aaaaaa;
+        }
+        .right-section{
+            margin-top: 5%;
+        }
+        .data-txt{
+            font-size: 18px;
+        }
+        .data-txt-title{
+            font-size: 20px;
+            font-weight: 600;
+            text-align: center;
+        }
+        .margin-top-5{
+            margin-top: 5px;
+        }
+        .right_side_image{
+            height: 100vh;
+            position: absolute;
+            right: 0;
+            bottom: 0;
+        }
+        .upload-icon{
+            width: 30px;
+            height: 33px;
+            margin-left: 5px;
+        }
+        .margin-left-10{
+            margin-left: 10px;
+        }
+        .margin-left-30{
+            margin-left: 32px;
+        }
+        .alert.success {
+            background-color: green;
+        }
+        .custom-main-card{
+            display: block;
+            margin-top: 15px;
+            margin-left: auto;
+            margin-right: auto;
+            border-radius: 15px;
+            height: 630px;
+            width: 550px;
+            box-shadow: 0px 0px 10px #a6a6a6;
+        }
+        .custom-card-header{
+            background-color: #0b5ed7;
+            border-radius: 15px 15px 0px 0px;
+            height: 40px;
+            text-align: center;
+            color: white;
+        }
+        .custom-card-header-text{
+            padding-top: 8px;
+        }
+        .custom-card-item{
+            position: center;
+            padding-left: 35px;
+        }
+        .custom-card-image{
+            border-radius: 10px;
+        }
+        #j_type{
+            height: 40px;
+        }
+        .custom-select{
+            background: transparent;
+            color: #656565;
+            border: none;
+            -webkit-box-shadow: 0px 0px 1px 1px #00000026;
+            box-shadow: 0px 0px 1px 1px #00000026;
+            border-radius: 5px;
+        }
+        .custom-select-div-class{
+            padding-left: 10px;
+            display: inline-block;
+        }
+    </style>
+    <script>
+        var loadFile = function(event) {
+        var output = document.getElementById('output');
+        output.src = URL.createObjectURL(event.target.files[0]);
+        output.onload = function() {
+          URL.revokeObjectURL(output.src) // free memory
+        }
+      };
+    </script>
+</head>
+
+<body>
+    <div class="custom-main-card">
+        <div class="custom-card-header">
+            <h4 class="custom-card-header-text">Upload Image</h4>
+        </div>
+        {% with messages=get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category,message in messages %}
+                    <div class="alert {{ category }}">{{message|capitalize}}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    <form action="{{ url_for('input_image')}}" method="POST" enctype="multipart/form-data" >
+        <div class="margin-top-30">
+            <div class="custom-card-item">
+                <div class="file btn btn-primary file-btn">
+                    Upload Image
+                    <input required class="file-btn-upload" id="fileinput" type="file" name="file" onchange="loadFile(event)">
+
+                    <img class="upload-icon" src="static/upload_icon.svg" alt="uploadicon">
+                </div>
+
+                <div class="custom-select-div-class">
+                        <select class="custom-select" name="j_type" id="j_type" required="required">
+                            <option value="">--Select Category--</option>
+                            <option value="Ring">Ring</option>
+                            <option value="Bracelate">Bracelate</option>
+                            <option value="Earring">Earring</option>
+                            <option value="Necklace">Necklace</option>
+                            <option value="Other">Other</option>
+                        </select>
+                </div>
+
+                <button type="submit"  class="btn btn-primary margin-left-30">Submit<img src="static/submit.svg" style="height: 20px; width: 20px; padding-left:3px"></button>
+                
+                <br>
+                <br>
+                
+                <img class="custom-card-image" id="output" width="475" height="475">
+            </div>
+        </div>
+    </form>
+    
+    
+        
+    </div>
+
+
+</body>
+</html>

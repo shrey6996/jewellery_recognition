@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+    integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/0.9.15/css/jquery.Jcrop.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/0.9.15/js/jquery.Jcrop.js"></script>
+  <link rel="stylesheet" href="/static/css/RegistrationProcess.css">
+
+    <title>Jewellery Recognition</title>
+    
+    <style>
+        .temp{
+            display: inline;
+        }
+        
+    </style>
+    
+    <script>
+
+    var Snip_id = "";
+    var Snip_LableName = "";
+    var instance = 12;
+
+    function removeDiv(elem) {
+      console.log(elem.id);
+      var element = document.forms['ExtractedDataForm'].getElementsByClassName(elem.id);
+      console.log(element[0]);
+      element[0].remove();
+      instance--;
+    }
+
+    function Edit() {
+      var item = document.forms['ExtractedDataForm'].getElementsByClassName("label-value");
+      console.log(item.length);
+      for (var i = 0; i < item.length; i++) {
+        item[i].setAttribute("contentEditable", "true");
+      }
+    }
+
+    function StopEditing() {
+      var item = document.forms['ExtractedDataForm'].getElementsByClassName("label-value");
+      console.log(item.length);
+      for (var i = 0; i < item.length; i++) {
+        new_value = item[i].textContent;
+        item[i].setAttribute("contentEditable", "false");
+        console.log(item[i].nextElementSibling);
+      }
+    }
+
+    function validateForm() {
+      let x = document.forms['ExtractedDataForm'].value;
+      let y = document.forms['ExtractedDataForm'].value;
+      let input_fileds_count = document.forms['ExtractedDataForm'].getElementsByTagName('input').length;
+      console.log(x, y);
+      console.log('xy');
+      if (x == "" || y == "") {
+        alert("Company Name and Invoice Type Can't be empty!");
+        return false;
+      }
+      if (input_fileds_count <= 2) {
+        alert("Alteast One field is required!")
+        return false;
+      }
+    }
+
+    function Capturing(elem) {
+      console.log("Here");
+      let item1 = document.forms['ExtractedDataForm'].getElementsByClassName(elem.id);
+        console.log(item1);
+      // Snip_LableName = item1[3].textContent;
+      Snip_id = elem.id;
+      $('#img2').Jcrop({
+        onSelect: SetCoordinates
+      });
+      return true;
+    }
+
+    // function Wait() {
+    //   console.log("Extracting data from document ")
+    // }
+
+    function SetCoordinates(c) {
+      data = { 
+          "id": Snip_id, 
+          values: c, 
+          "Snip_lableName": Snip_LableName, 
+          "filename": "{{ img }}",
+          "j_type": "{{ j_type }}",
+      }
+      $.ajax({
+        type: "POST",
+        url: "{{ url_for('SendCoordinates') }}",
+        data: JSON.stringify(data),
+        contentType: "application/json",
+        dataType: 'json',
+        success: function (result) {
+            console.log("success")
+            console.log(result)
+            cropped_image = "static/crop/" + result["image"]
+            // document.getElementById('image').src = cropped_image
+            document.getElementById('cropped_img').value = cropped_image
+            
+            var image = document.getElementById("image");    
+            image.src = cropped_image; 
+        }
+      });
+      JcropAPI = $('#img2').data('Jcrop');
+      JcropAPI.destroy();
+    }
+
+    function newTextBox() {
+
+      instance++;
+      var newInput = document.createElement("INPUT");
+      newInput.setAttribute("class", instance + " form-control");
+      newInput.id = instance;
+      newInput.placeholder = "New Field"
+      newInput.name = "text" + instance;
+      newInput.type = "text";
+
+      //Make Label
+      var label = document.createElement('label');
+      label.setAttribute('class', instance + ' label-value');
+      label.setAttribute("for", "floatingInput")
+      label.innerHTML = "New Field";
+
+      DIV2.appendChild(newInput);
+      DIV2.appendChild(label);
+
+      var DIV3 = document.createElement('div');
+      DIV3.setAttribute("class", "margin-left-5");
+
+      var captureButton = document.createElement('a');
+      captureButton.setAttribute("class", "active text-center margin-top");
+      captureButton.setAttribute("value", "snip");
+      captureButton.setAttribute("name", "snip");
+      captureButton.id = instance;
+      captureButton.setAttribute("onclick", "Capturing(this)");
+
+
+      //caputebutton icon 
+      var Captureicon = document.createElement("i");
+      Captureicon.setAttribute("class", "fas fa-camera fa-2x");
+        
+      DIV3.appendChild(captureButton);
+      captureButton.appendChild(Captureicon);
+      DIV1.appendChild(DIV3);
+      var DIV4 = document.createElement('div');
+      DIV4.setAttribute("class", "margin-left-5");
+      DIV1.appendChild(DIV4);
+
+
+      // var btn = document.createElement("button");
+      // btn.setAttribute("onclick", "removeDiv(this)");
+      // btn.setAttribute("id", instance);
+      // btn.innerHTML = "remove";
+
+
+      document.getElementById("NewFieldAdd").appendChild(DIV1);
+    }
+  </script>
+    
+    <style>
+        .custom-main-card{
+/*             display:block; */
+            margin-top: 15px;
+            margin-left: auto;
+            margin-right: auto;
+            border-radius: 15px;
+           height:auto;
+            width:95%;
+            box-shadow: 0px 0px 10px #a6a6a6;
+        }
+        .custom-card-header{
+            background-color: #0b5ed7;
+            border-radius: 15px 15px 0px 0px;
+            height: 50px;
+            text-align: center;
+            color: white;
+        }
+        .custom-card-item{
+            margin-left:15px;
+           
+        }
+        .custom-card-image{
+            border-radius: 20px;
+           
+        }
+        .combined-btn{
+            position:absolute;
+            bottom:35px;
+            display:flex;
+            justify-content:center;
+            width:48%;
+           
+        }
+        .image-btn-combined{
+            
+        }
+        .img-pos{
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .all-custom{
+            display:flex;
+            width:100%;
+                padding:15px;
+        }
+        
+        .main_img{
+            width:50%;
+                overflow:auto;
+            border-radius:20px;
+            height:550px;
+           
+        }
+        
+        .custom-card-item{
+        width:50%
+        }
+        
+        .pad_right{
+            padding-right:20px;
+        }
+        
+        .margin-right-10{
+            margin-right:10px;
+        }
+        
+        .cropped_text{
+            text-align:center;
+        }
+      
+        
+    </style>
+    
+</head>
+<body>
+  <div class="custom-main-card">
+        <div class="custom-card-header">
+            <h1>crop</h1>
+        </div>
+        
+        <div class="all-custom">
+            
+           
+                 <div class="main_img">
+            <img src="{{ img }}" GFG="auto" id="img2" class="custom-card-image"
+                  type="application/jpeg">
+                </div>
+
+
+            <div class="custom-card-item">
+                <div class="image-btn-combined">
+                      <!-- <div class="cropped_text" >
+                       <h3>This is a cropped image</h3>
+                      </div> -->
+                   <div class="img-pos" >
+                        <img id="image">
+                    </div>
+                  
+
+                    <div class="combined-btn">
+                        <form name="ExtractedDataForm" id="ExtractedDataForm" method="POST" onsubmit="return validateForm()" class="pad_right">
+                            <div class="temp">
+                                <div class="margin-left-5" style="background: #0d6efd; border-radius: 8px;">
+                                    
+                                        <a class="active text-center margin-top" value="snip" name="snip" id="0"
+                                           onclick="Capturing(this)">
+                                            <i class="fas fa-pencil-alt fa-2x btn btn-primary btn-reset" style="font-size:17px; padding-top:8px; height:38px;">
+                                            {% if cropped == "done" %}
+                                                Retake
+                                            {% else %}
+                                                Crop
+                                            {% endif %}
+                                            </i>
+    <!--                                      <button type="submit" class="btn btn-primary btn-reset"><img class="margin-right-10" src="static/undo-arrow 1.svg" style="height: 18px; width: 18px">Crop</button> -->
+                                        </a>
+                                            
+                                </div>
+                            </div>
+                        </form>
+
+                        <form action="{{url_for('input_image')}}" method="POST">
+                            <input type="hidden" id="filename" name="filename" value="{{ img }}">
+                            <input type="hidden" id="j_type" name="j_type" value="{{ j_type }}">
+                            <input type="hidden" id="cropped_img" name="cropped_img" >
+
+                            <button type="submit" class="btn btn-primary btn-reset" style="border-radius:4px; font-weight:600;">Submit<img class="margin-right-10" src="static/submit.svg" style="padding-left: 5px; height: 22px; width: 22px;"></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+       
+        </div> 
+    </div>
+</body>
+
+</html>
